@@ -13,10 +13,10 @@ typedef struct StepMotor{
 // If one happens faster than other then faster one stops and slower keeps repeating
 // Can't move to next instr unless steps for both motors are done
 // instr are for change in angle not final angle(Get the difference ;))
-static int angleInstrM1 = [90];
-static int dirInstrM1 = [true];
-static int angleInstrM2 = [90];
-static int dirInstrM2 = [true];
+static int angleInstrM1[] = {90};
+static int dirInstrM1[] = {true};
+static int angleInstrM2[] = {90};
+static int dirInstrM2[] = {true};
 static StepMotors M1,M2;
 
 
@@ -135,26 +135,28 @@ Serial.println((*Motor).stepNum);
   
 void loop() {
   // For loop to go through all the instructions
+  int stepM1Counter = 0;
+  int stepM2Counter = 0;
   for(int j = 0; j < 1;j++  )
   {
   
  // Convert angle to steps
-  stepsM1 = (anglrInstrM1[j]/360)*2048;
-  stepsM2 = (anglrInstrM2[j]/360)*2048;
+  int stepsM1 = (angleInstrM1[j]/360)*2048;
+  int stepsM2 = (angleInstrM2[j]/360)*2048;
   // can include delay as well by adding and tick =  some number
   // Runs loop again and again until required number of steps has been completed
-  while(stepsM1Counter < stepsM1 && stepsM2Counter < stepsM2 )
-    if(stepsM1Counter < stepsM1){
-      Onestep(&M1, dirInstrM1[j]);
+  while(stepM1Counter < stepsM1 && stepM2Counter < stepsM2 )
+    if(stepM1Counter < stepsM1){
+      OneStep(&M1, dirInstrM1[j]);
       stepM1Counter++;
     }
-    if(stepsM2Counter < stepsM2){
-      Onestep(&M2, dirInstrM2[j]);
+    if(stepM2Counter < stepsM2){
+      OneStep(&M2, dirInstrM2[j]);
       stepM2Counter++;
     }
   }
 }
-  }
+ 
 
   ISR(TIMER0_COMPA_vect){    //This is the interrupt request
   timer++;
