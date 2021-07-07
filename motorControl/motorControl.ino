@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdlib.h>
 int timer = 0;
 
 typedef struct StepMotor{
@@ -135,23 +136,30 @@ Serial.println((*Motor).stepNum);
   
 void loop() {
   // For loop to go through all the instructions
+  int lengthArray = sizeof(angleInstrM1)/sizeof(int);
+  
+  for(int j = 0; j < lengthArray;j++  )
+  {
+    
   int stepM1Counter = 0;
   int stepM2Counter = 0;
-  for(int j = 0; j < 1;j++  )
-  {
-  
  // Convert angle to steps
-  int stepsM1 = (angleInstrM1[j]/360)*2048;
-  int stepsM2 = (angleInstrM2[j]/360)*2048;
+  long stepsM1 = (angleInstrM1[j]*(long)2048)/360;
+  Serial.println(stepsM1);
+  long stepsM2 = (angleInstrM2[j]*(long)2048)/360;
   // can include delay as well by adding and tick =  some number
   // Runs loop again and again until required number of steps has been completed
   while(stepM1Counter < stepsM1 && stepM2Counter < stepsM2 )
+ 
     if(stepM1Counter < stepsM1){
-      OneStep(&M1, dirInstrM1[j]);
+      
+      //OneStep(&M1, dirInstrM1[j]);
+       
       stepM1Counter++;
     }
     if(stepM2Counter < stepsM2){
-      OneStep(&M2, dirInstrM2[j]);
+    OneStep(&M2, dirInstrM2[j]);
+     // Serial.println("cmd");
       stepM2Counter++;
     }
   }
